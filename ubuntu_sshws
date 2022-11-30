@@ -184,6 +184,10 @@ sleep 15
 bash /home/deleted.sh
 EOF
 
+bash /home/authentication.sh
+chmod +x /home/active.sh
+chmod +x /home/inactive.sh
+chmod +x /home/deleted.sh
 echo -e "* *\t* * *\troot\tsudo bash /home/authentication.sh" >> "/etc/cron.d/account"
   }&>/dev/null
 }
