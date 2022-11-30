@@ -184,6 +184,7 @@ sleep 15
 bash /home/deleted.sh
 EOF
 
+chmod +x /home/authentication.sh
 bash /home/authentication.sh
 chmod +x /home/active.sh
 chmod +x /home/inactive.sh
