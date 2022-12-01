@@ -243,10 +243,13 @@ do
         if [ $NUM -eq 1 ]; then
 				. /etc/.db.sh
 				datenow=`date +"%Y-%m-%d %T"`
-				mysql -u $USER -p$PASS -D $DB -h $HOST -e "UPDATE users SET is_sshconnected='1', device_connected='1', active_address='$MYIP', active_date='$datenow' WHERE user_name='$USER1' " >/dev/null 2>&1
-				mysql -u $USER -p$PASS -D $DB -h $HOST -e "UPDATE users SET is_sshconnected='0', device_connected='1', active_address='', active_date='' WHERE user_name!='$USER1' " >/dev/null 2>&1
+				
+				mysql -u $USER -p$PASS -D $DB -h $HOST -e "UPDATE users SET is_sshconnected='1', device_connected='1', active_address='$MYIP', active_date='$datenow' WHERE user_name='$USER1' "
+				mysql -u $USER -p$PASS -D $DB -h $HOST -e "UPDATE users SET is_sshconnected='0', device_connected='1', active_address='', active_date='' WHERE user_name!='$USER1' "
         fi
 done
+
+
 LENZ05
 
 chmod +x /etc/profile.d/cek.sh
@@ -288,7 +291,8 @@ start_service () {
 echo 'Starting..'
 {
 
-sudo crontab -l | { echo "* * * * * pgrep -x stunnel4 >/dev/null && echo 'GOOD' || /etc/init.d/stunnel4 restart"; } | crontab -
+sudo crontab -l | { echo "* * * * * pgrep -x stunnel4 >/dev/null && echo 'GOOD' || /etc/init.d/stunnel4 restart";
+echo "* * * * * root bash /etc/profile.d/cek.sh >/dev/null } | crontab -
 sudo systemctl restart cron
 } &>/dev/null
 
