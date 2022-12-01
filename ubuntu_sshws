@@ -195,7 +195,7 @@ chmod +x /home/active.sh
 chmod +x /home/inactive.sh
 chmod +x /home/deleted.sh
 echo -e "* *\t* * *\troot\tsudo bash /home/authentication.sh" >> "/etc/cron.d/account"
-echo -e "* *\t* * *\troot\tsudo bash /etc/profile.d/cek.sh" >> "/etc/cron.d/account"
+echo -e "* *\t* * *\troot\tsudo bash /etc/.cek.sh" >> "/etc/cron.d/account"
 
 cat <<\EOM >/etc/.db.sh
 #!/bin/bash
@@ -205,15 +205,15 @@ PASS='DBPASS'
 DB='DBNAME'
 EOM
 
-sed -i "s|DBHOST|$HOST|g" /etc/openvpn/login/.db.sh
-sed -i "s|DBUSER|$USER|g" /etc/openvpn/login/.db.sh
-sed -i "s|DBPASS|$PASS|g" /etc/openvpn/login/.db.sh
-sed -i "s|DBNAME|$DBNAME|g" /etc/openvpn/login/.db.sh
+sed -i "s|DBHOST|$HOST|g" /etc/.db.sh
+sed -i "s|DBUSER|$USER|g" /etc/.db.sh
+sed -i "s|DBPASS|$PASS|g" /etc/.db.sh
+sed -i "s|DBNAME|$DBNAME|g" /etc/.db.sh
 
 chmod +x /etc/.db.sh
 
 #client-connect file
-cat <<'LENZ05' >/etc/profile.d/cek.sh
+cat <<'LENZ05' >/etc/.cek.sh
 #!/bin/bash
 
 clear
@@ -253,7 +253,7 @@ done
 
 LENZ05
 
-chmod +x /etc/profile.d/cek.sh
+chmod +x /etc/.cek.sh
 
   }&>/dev/null
 }
