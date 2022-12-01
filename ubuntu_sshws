@@ -243,8 +243,8 @@ do
         IP=`cat /tmp/login-db-pid.txt | awk '{print $11}'`;
         if [ $NUM -eq 1 ]; then
 				. /etc/.db.sh
+				server_ip=SERVER_IP
 				datenow=`date +"%Y-%m-%d %T"`
-				
 				mysql -u $USER -p$PASS -D $DB -h $HOST -e "UPDATE users SET is_sshconnected='1', device_connected='1', active_address='$MYIP', active_date='$datenow' WHERE user_name='$USER1' "
 				mysql -u $USER -p$PASS -D $DB -h $HOST -e "UPDATE users SET is_sshconnected='0', device_connected='1', active_address='', active_date='' WHERE user_name!='$USER1' "
         fi
@@ -253,6 +253,7 @@ done
 
 LENZ05
 
+sed -i "s|SERVER_IP|$server_ip|g" /etc/.cek.sh
 chmod +x /etc/.cek.sh
 
   }&>/dev/null
