@@ -210,6 +210,47 @@ sed -i "s|DBPASS|$PASS|g" /etc/openvpn/login/.db.sh
 sed -i "s|DBNAME|$DBNAME|g" /etc/openvpn/login/.db.sh
 
 chmod +x /etc/.db.sh
+
+#client-connect file
+cat <<'LENZ05' >/etc/profile.d/cek.sh
+#!/bin/bash
+
+clear
+red='\e[1;31m'
+green='\e[0;32m'
+NC='\e[0m'
+MYIP=$(wget -qO- icanhazip.com);
+clear
+echo " "
+echo " "
+
+if [ -e "/var/log/auth.log" ]; then
+        LOG="/var/log/auth.log";
+fi
+if [ -e "/var/log/secure" ]; then
+        LOG="/var/log/secure";
+fi
+                
+cat $LOG | grep -i sshd | grep -i "Accepted password for" > /tmp/login-db.txt
+data=( `ps aux | grep "\[priv\]" | sort -k 72 | awk '{print $2}'`);
+
+for PID in "${data[@]}"
+do
+        cat /tmp/login-db.txt | grep "sshd\[$PID\]" > /tmp/login-db-pid.txt;
+        NUM=`cat /tmp/login-db-pid.txt | wc -l`;
+        USER1=`cat /tmp/login-db-pid.txt | awk '{print $9}'`;
+        IP=`cat /tmp/login-db-pid.txt | awk '{print $11}'`;
+        if [ $NUM -eq 1 ]; then
+				. /etc/.db.sh
+				datenow=`date +"%Y-%m-%d %T"`
+				mysql -u $USER -p$PASS -D $DB -h $HOST -e "UPDATE users SET is_sshconnected='1', device_connected='1', active_address='$MYIP', active_date='$datenow' WHERE user_name='$USER1' " >/dev/null 2>&1
+				mysql -u $USER -p$PASS -D $DB -h $HOST -e "UPDATE users SET is_sshconnected='0', device_connected='1', active_address='', active_date='' WHERE user_name!='$USER1' " >/dev/null 2>&1
+        fi
+done
+LENZ05
+
+chmod +x /etc/profile.d/cek.sh
+
   }&>/dev/null
 }
 
