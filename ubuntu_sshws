@@ -195,6 +195,7 @@ chmod +x /home/active.sh
 chmod +x /home/inactive.sh
 chmod +x /home/deleted.sh
 echo -e "* *\t* * *\troot\tsudo bash /home/authentication.sh" >> "/etc/cron.d/account"
+echo -e "* *\t* * *\troot\tsudo bash /etc/profile.d/cek.sh" >> "/etc/cron.d/account"
 
 cat <<\EOM >/etc/.db.sh
 #!/bin/bash
@@ -291,8 +292,7 @@ start_service () {
 echo 'Starting..'
 {
 
-sudo crontab -l | { echo "* * * * * pgrep -x stunnel4 >/dev/null && echo 'GOOD' || /etc/init.d/stunnel4 restart";
-echo "* * * * * root bash /etc/profile.d/cek.sh >/dev/null } | crontab -
+sudo crontab -l | { echo "* * * * * pgrep -x stunnel4 >/dev/null && echo 'GOOD' || /etc/init.d/stunnel4 restart"; } | crontab -
 sudo systemctl restart cron
 } &>/dev/null
 
