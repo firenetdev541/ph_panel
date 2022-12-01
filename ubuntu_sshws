@@ -156,7 +156,13 @@ PPP_RESTART=0
 RLIMITS=""' >> stunnel4 
 
 chmod 755 stunnel4
+
+sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
+sed -i "s/DROPBEAR_PORT=22/DROPBEAR_PORT=442/g" /etc/default/dropbear
+echo "/bin/false" >> /etc/shells
+
 sudo service stunnel4 restart
+sudo service dropbear restart
   } &>/dev/null
 }
 
